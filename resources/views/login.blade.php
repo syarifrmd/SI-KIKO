@@ -6,26 +6,91 @@
     <title>Login</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet" type="text/css" >
+    <!-- FontAwesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .login-content {
+            margin-left: 150px;
+        }
+        .wave {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            z-index: -1;
+        }
+        .img img {
+            width: 100%;
+        }input:focus {
+            background-color: transparent; 
+            outline: none;
+            border-bottom: 2px solid #3CB371; 
+            transition: border-bottom 0.3s ease; 
+        }
+        
+        
+
+        
+
+        
+    </style>
 </head>
 <body>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <h3 class="text-center">Login</h3>
+    <img class="wave" src="{{ asset('storage/wave.png') }}" alt="Wave">
+    <div class="container">
+        <div class="img">
+            <img src="{{ asset('storage/bg.svg') }}" alt="Background">
+        </div>
+        <div class="login-content">
             <form method="POST" action="{{ route('login') }}">
                 @csrf
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" id="email" required>
+                <img src="{{ asset('storage/avatar.svg') }}" alt="Avatar">
+                <h2 class="title">Login</h2>
+
+                <!-- Pesan Error -->
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- Input Email -->
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="div">
+                        <h5 class="teksinput">Email</h5>
+                        <input type="email" name="email" class="input" required>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" id="password" required>
+
+                <!-- Input Password -->
+                <div class="input-div pass">
+                    <div class="i">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5 class="teksinput">Password</h5>
+                        <input type="password" name="password" class="input" required>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary w-100">Login</button>
+
+                <!-- Tombol Login -->
+                <div style="margin-top:30px" class="logindong">
+                    <input type="submit" class="btn" value="Login">
+                    <div class="login-link">
+                        <b><p><a href="{{ route('register') }}" style="color:#3CB371;">Register</a></p></b>
+                    </div>
+                </div>
+                
             </form>
         </div>
     </div>
-</div>
+    <script type="text/javascript" src="js/main.js"></script>
 </body>
 </html>

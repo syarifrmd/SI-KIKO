@@ -19,17 +19,15 @@ Route::middleware(['auth', 'role:perawat'])->group(function () {
     Route::get('/perawat/dashboard', [PerawatController::class, 'index'])->name('perawat.dashboard');
 });
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+// Route::middleware(['guest.register'])->group(function () {
+//     Route::get('/register', [LoginController::class, 'register'])->name('register'); // Halaman register
+//     Route::post('/register', [LoginController::class, 'create'])->name('create'); // Proses register
+// });
 
+Route::get('/register', [LoginController::class, 'register'])->name('register'); // Halaman register
+Route::post('/register', [LoginController::class, 'create'])->name('create'); 
+
+// Halaman Home
 Route::get('/', function () {
     return view('welcome');
 });
