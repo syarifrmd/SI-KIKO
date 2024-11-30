@@ -21,7 +21,17 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'role_id',
+        'nip',
+        'jenis_kelamin',
+        'tanggal_masuk',
+        'foto_perawat',
     ];
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
 
     /**
      * The attributes that should be hidden for arrays.
