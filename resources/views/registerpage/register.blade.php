@@ -71,15 +71,15 @@
     </style>
 </head>
 <body>
-    <img class="wave" src="{{ asset('storage/wave.png') }}" alt="Wave">
+    <img class="wave" src="{{ asset('images/wave.png') }}" alt="Wave">
     <div class="container">
         <div class="img">
-            <img src="{{ asset('storage/bg.svg') }}" alt="Background">
+            <img src="{{ asset('images/bg.svg') }}" alt="Background">
         </div>
         <div class="login-content" style="margin-left: 150px">
             <form method="POST" action="{{ route('create') }}">
                 @csrf
-                <img src="{{ asset('storage/avatar.svg') }}" alt="Avatar">
+                <img src="{{ asset('images/avatar.svg') }}" alt="Avatar">
                 <h2 class="title">Register</h2>
 
                 <!-- Pesan Error -->
