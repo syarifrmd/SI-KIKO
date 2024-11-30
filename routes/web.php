@@ -9,6 +9,7 @@ Route::get('/login', [LoginController::class, 'index'])->name('login');
 Route::post('/login', [LoginController::class, 'authenticate']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
+// Role Admin
 Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     
@@ -36,6 +37,21 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::put('admin/medical-records/{rekamMedis}', [AdminController::class, 'updateMedicalRecord'])->name('admin.medical_records.update');
     Route::delete('admin/medical-records/{rekamMedis}', [AdminController::class, 'destroyMedicalRecord'])->name('admin.medical_records.destroy');
 });
+
+//Role Perawat
+
+Route::middleware(['auth', 'role:perawat'])->group(function () {
+    Route::get('perawat/dashboard', [PerawatController::class, 'index'])->name('perawat.dashboard');
+
+    //Route Pasien
+    Route::get('perawat/patients', [PerawatController::class, 'managePatients'])->name('perawat.patients.index');
+    Route::get('perawat/patients/create', [PerawatController::class, 'createPatient'])->name('perawat.patients.create');
+    Route::post('perawat/patients', [PerawatController::class,'storePatient'])->name('perawat.patients.store');
+    Route::get('perawat/patients/{pasien}/edit', [PerawatController::class, 'editPatient'])->name('perawat.patients.edit');
+    Route::put('perawat/patients/{pasien}', [PerawatController::class, 'updatePatient'])->name('perawat.patients.update');
+    Route::delete('perawat/patients/{pasien}', [PerawatController::class, 'destroyPatient'])->name('perawat.patients.destroy');
+});
+
 
 // Route::middleware(['guest.register'])->group(function () {
 //     Route::get('/register', [LoginController::class, 'register'])->name('register'); // Halaman register

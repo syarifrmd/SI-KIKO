@@ -40,7 +40,7 @@
                 <option value="" disabled selected>Pilih Pasien</option>
                 @foreach($pasiens as $pasien)
                     <option value="{{ $pasien->id }}" {{ old('pasien_id') == $pasien->id ? 'selected' : '' }}>
-                        {{ $pasien->nama }} ({{ $pasien->no_rm }})
+                        {{ $pasien->nama }} ({{ $pasien->id }})
                     </option>
                 @endforeach
             </select>
@@ -56,7 +56,7 @@
                 <option value="" disabled selected>Pilih Perawat</option>
                 @foreach($users as $user)  <!-- Ensure you pass the users to the view -->
                     <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                        {{ $user->name }}  <!-- Use $user->name, not $user->name -->
+                        {{ $user->name }} ({{ $user->nip}})
                     </option>
                 @endforeach
             </select>
