@@ -14,17 +14,21 @@
             top: 0;
             left: 0;
             width: 250px;
-            background-color: #343a40;
-            padding-top: 20px;
+            background-color: #2c3e50;
+            padding-top: 30px;
+            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar .nav-link {
-            color: #ddd;
-            padding: 10px 15px;
+            color: #ecf0f1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
 
         .sidebar .nav-link:hover {
-            background-color: #007bff;
+            background-color: #1abc9c;
             color: white;
         }
 
@@ -32,35 +36,97 @@
         .content-wrapper {
             margin-left: 250px;
             padding: 20px;
+            background-color: #f8f9fa;
         }
 
         .navbar {
             margin-left: 250px;
         }
 
+        .text-tittle {
+            font-size: 34px;
+            margin-bottom: 20px;
+            color: #28a745; /* Warna hijau yang lebih terang */
+        }
+
+        /* Card styling */
         .card-container {
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
+            justify-content: space-between;
         }
 
         .card {
             width: 18rem;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
         .card img {
             width: 100%;
-            height: auto;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
         }
 
         .card-body {
             text-align: center;
+            padding: 20px;
         }
 
-        .text-tittle {
-            font-size: 34px;
-            margin-bottom: 20px;
-            color: green;
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .card-text {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+
+        .btn-primary, .btn-warning, .btn-danger {
+            font-size: 0.875rem;
+            padding: 8px 12px;
+        }
+
+        /* Styling for buttons */
+        .btn-primary {
+            background-color: #28a745;
+            border-color: #28a745;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            border-color: #ffc107;
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            border-color: #d39e00;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
         }
     </style>
 </head>
@@ -68,9 +134,9 @@
 
     <!-- Sidebar -->
     <div class="sidebar">
-                <a class="nav-link" href="{{ route('admin.dashboard') }}">
-                    <h3 class="text-white text-center mb-4">Admin Dashboard</h3>
-                </a>
+        <a class="nav-link" href="{{ route('admin.dashboard') }}">
+            <h3 class="text-white text-center mb-4">Admin Dashboard</h3>
+        </a>
         
         <ul class="nav flex-column">
             <li class="nav-item">
@@ -91,16 +157,17 @@
         </ul>
     </div>
 
+    <!-- Content Wrapper -->
     <div class="content-wrapper">
         <h1 class="text-tittle">Daftar Perawat</h1>
         <a href="{{ route('admin.perawat.create') }}" class="btn btn-primary mb-3">Tambah Perawat</a>
-
+        <br><br>
         <!-- Card container -->
-        <div  class="card-container">
+        <div class="card-container">
             @foreach($perawats as $perawat)
-                <div style="width: 250px; align-items: center; justify-content: center; display: flex;" class="card ">
+                <div style="align-items: center; justify-content: center; display: flex;" class="card " class="card">
                     <img style="width: 177px; height: 236px; object-fit: cover; " src="{{ $perawat->foto_perawat ? asset('storage/'.$perawat->foto_perawat) : asset('storage/foto_perawat/default.jpg') }}" alt="Foto Perawat">
-                    <div style="width: 250px;" class="card-body">
+                    <div class="card-body">
                         <h5 class="card-title">{{ $perawat->name }}</h5>
                         <p class="card-text">
                             <strong>NIP:</strong> {{ $perawat->nip }} <br>

@@ -14,21 +14,24 @@
             top: 0;
             left: 0;
             width: 250px;
-            background-color: #343a40;
-            padding-top: 20px;
+            background-color: #2c3e50;
+            padding-top: 30px;
+            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar .nav-link {
-            color: #ddd;
-            padding: 10px 15px;
+            color: #ecf0f1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
 
         .sidebar .nav-link:hover {
-            background-color: #007bff;
+            background-color: #1abc9c;
             color: white;
         }
 
-        /* Custom style for content */
         .content-wrapper {
             margin-left: 250px;
             padding: 20px;
@@ -36,6 +39,55 @@
 
         .navbar {
             margin-left: 250px;
+            background-color: #ffffff;
+            padding: 10px 20px;
+        }
+
+        .navbar .navbar-text {
+            font-size: 18px;
+            color: #34495e;
+        }
+
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            background-color: #34495e;
+            color: #ffffff;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-body {
+            background-color: #ecf0f1;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .card-title {
+            font-size: 30px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .card-text {
+            color: #7f8c8d;
+        }
+
+        /* Custom logout button */
+        .btn-logout {
+            background-color: #e74c3c;
+            color: white;
+            border-radius: 5px;
+            padding: 8px 15px;
+        }
+
+        .btn-logout:hover {
+            background-color: #c0392b;
+        }
+
+        .navbar-text strong {
+            color: #2c3e50;
         }
     </style>
 </head>
@@ -64,27 +116,37 @@
     </div>
 
     <!-- Content Wrapper -->
-    <div class="content-wrapper">
-        <!-- Navbar atas -->
+                    <div class="content-wrapper ">
+                        <!-- Navbar atas -->
         <nav style="width: 300px; float: right;" class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="container-fluid">
                 <span class="navbar-text">
                     <strong>{{ auth()->user()->name }}</strong>
                 </span>
                 <div class="ml-auto">
-                    <form action="{{ route('logout') }}" method="POST" style="display:inline;">
-                        @csrf
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-sign-out-alt"></i> Logout
+                    <div class="btn-group">
+                        <!-- Dropdown button -->
+                        <button type="button"  class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user"></i> Admin
                         </button>
-                    </form>
+                        <div class="dropdown-menu">
+                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" class="dropdown-item btn-logout">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
-
+        <br><br>
         <!-- Main Content -->
         <div class="container-fluid">
-            <h1 class="mb-4">Dashboard Admin</h1>
+            <h1 class="mb-4" style="font-size: 36px; font-weight: 600; color: #34495e;">Dashboard Admin</h1>
+
+            <!-- Pasien Overview -->
             <div class="row">
                 <div class="col-md-4">
                     <div class="card">
@@ -121,7 +183,7 @@
                 </div>
             </div>
 
-            <!-- Rekam Medis -->
+            <!-- Rekam Medis Overview -->
             <div class="row mt-4">
                 <div class="col-md-4">
                     <div class="card">
