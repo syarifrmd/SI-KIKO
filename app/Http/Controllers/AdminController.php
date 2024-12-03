@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\User;
 use App\Models\Pasien;
 use App\Models\RekamMedis;
@@ -27,6 +28,7 @@ class AdminController extends Controller
     }
 
     // Menampilkan daftar perawat
+    // Menampilkan daftar perawat
     public function managePerawat()
     {
         $perawats = User::where('role', 'perawat')->get();
@@ -42,38 +44,33 @@ class AdminController extends Controller
     // Menyimpan data perawat
     public function storePerawat(Request $request)
     {
-        // Validasi inputan
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'nip' => 'required|unique:users,nip',
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'tanggal_masuk' => 'required|date',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:6',
-            'foto_perawat' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // validasi foto
-        ]);
-        
-        // Menyimpan foto
-        $fotoPerawatPath = null;
-        if ($request->hasFile('foto_perawat')) {
-            $file = $request->file('foto_perawat');
-            $fotoPerawatPath = $file->store('foto_perawat', 'public'); // Menyimpan file ke storage/app/public/foto_perawat
-        }
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'nip' => 'required|unique:users,nip',
+        'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+        'tanggal_masuk' => 'required|date',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6',
+        'foto_perawat' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
-        // Menyimpan data perawat ke database
-        User::create([
-            'name' => $request->name,
-            'nip' => $request->nip,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'tanggal_masuk' => $request->tanggal_masuk,
-            'email' => $request->email,
-            'password' => bcrypt($request->password), // bcrypt password
-            'foto_perawat' => $fotoPerawatPath, // Menyimpan path foto
-            'role' => 'perawat',
-        ]);
-    
-        // Redirect ke daftar perawat setelah berhasil menyimpan
-        return redirect()->route('admin.perawat.index')->with('success', 'Perawat berhasil ditambahkan!');
+    $fotoPerawatPath = null;
+    if ($request->hasFile('foto_perawat')) {
+        $fotoPerawatPath = $request->file('foto_perawat')->store('foto_perawat', 'public');
+    }
+
+    User::create([
+        'name' => $request->name,
+        'nip' => $request->nip,
+        'jenis_kelamin' => $request->jenis_kelamin,
+        'tanggal_masuk' => $request->tanggal_masuk,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+        'foto_perawat' => $fotoPerawatPath,
+        'role' => 'perawat',
+    ]);
+
+    return redirect()->route('admin.perawat.index')->with('success', 'Perawat berhasil ditambahkan!');
     }
 
     // Mengedit data perawat
@@ -85,56 +82,48 @@ class AdminController extends Controller
     // Memperbarui data perawat
     public function updatePerawat(Request $request, User $perawat)
     {
-        // Validasi inputan
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $perawat->id,
-            'nip' => 'required|unique:users,nip,' . $perawat->id, // Include the user ID to exclude the current user's NIP from validation
-            'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
-            'tanggal_masuk' => 'required|date',
-            'password' => 'nullable|min:6', // Make password optional, only require if filled
-            'foto_perawat' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Foto is optional, but if provided, it must be an image
-        ]);
-    
-        // If a new photo is uploaded, handle the file upload
-        if ($request->hasFile('foto_perawat')) {
-            // Delete the old photo if it exists
-            if ($perawat->foto_perawat) {
-                \Storage::delete('public/' . $perawat->foto_perawat);
-            }
+    $request->validate([
+        'name' => 'required|string',
+        'email' => 'required|email|unique:users,email,' . $perawat->id,
+        'nip' => 'required|unique:users,nip,' . $perawat->id,
+        'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+        'tanggal_masuk' => 'required|date',
+        'password' => 'nullable|min:6',
+        'foto_perawat' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
 
-            // Store the new photo and get the path
-            $fotoPerawatPath = $request->file('foto_perawat')->store('public/foto_perawat');
-        } else {
-            // If no new photo is uploaded, keep the old photo
-            $fotoPerawatPath = $perawat->foto_perawat; // Use the existing photo path
+    if ($request->hasFile('foto_perawat')) {
+        if ($perawat->foto_perawat) {
+            Storage::delete('public/' . $perawat->foto_perawat);
         }
-    
-        // Update the perawat record
-        $perawat->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'nip' => $request->nip,
-            'jenis_kelamin' => $request->jenis_kelamin,
-            'tanggal_masuk' => $request->tanggal_masuk,
-            'password' => $request->password ? bcrypt($request->password) : $perawat->password, // Update password if provided
-            'foto_perawat' => $fotoPerawatPath, // Save the new photo path or keep the existing one
-        ]);
-    
-        return redirect()->route('admin.perawat.index')->with('success', 'Perawat berhasil diperbarui!');
+        $fotoPerawatPath = $request->file('foto_perawat')->store('foto_perawat', 'public');
+    } else {
+        $fotoPerawatPath = $perawat->foto_perawat;
     }
+
+    $perawat->update([
+        'name' => $request->name,
+        'email' => $request->email,
+        'nip' => $request->nip,
+        'jenis_kelamin' => $request->jenis_kelamin,
+        'tanggal_masuk' => $request->tanggal_masuk,
+        'password' => $request->password ? bcrypt($request->password) : $perawat->password,
+        'foto_perawat' => $fotoPerawatPath,
+    ]);
+
+    return redirect()->route('admin.perawat.index')->with('success', 'Perawat berhasil diperbarui!');
+}
 
     // Menghapus data perawat
     public function destroyPerawat(User $perawat)
     {
-        // Delete the photo if it exists
         if ($perawat->foto_perawat) {
-            \Storage::delete('public/' . $perawat->foto_perawat);
+            Storage::delete('public/' . $perawat->foto_perawat);
         }
-
         $perawat->delete();
         return redirect()->route('admin.perawat.index')->with('success', 'Perawat berhasil dihapus!');
     }
+
 
     // Menampilkan daftar pasien
     public function ManagePatients() // Rename this function to avoid conflict with the `index()` function
@@ -208,7 +197,7 @@ public function updatePatient(Request $request, $id)
     if ($request->hasFile('foto_pasien')) {
         // Hapus foto lama jika ada
         if ($pasien->foto_pasien) {
-            \Storage::delete('public/' . $pasien->foto_pasien);
+            Storage::delete('public/' . $pasien->foto_pasien);
         }
 
         // Simpan foto baru
@@ -247,7 +236,7 @@ public function updatePatient(Request $request, $id)
     // Menampilkan daftar rekam medis
     public function manageMedicalRecords()
     {
-        $medicalRecords = RekamMedis::all();
+        $medicalRecords = RekamMedis::with('pasien', 'user', 'perawat')->get();
         return view('admin.medical_records.index', compact('medicalRecords'));
     }
 
@@ -255,7 +244,7 @@ public function updatePatient(Request $request, $id)
     public function createMedicalRecord()
     {
         $pasiens = Pasien::all(); 
-        $users = User::where('role', 'perawat')->get();
+        $users = User::where('role', 'perawat')->get(); 
 
         return view('admin.medical_records.create', compact('pasiens', 'users'));
     }
@@ -264,7 +253,7 @@ public function updatePatient(Request $request, $id)
     public function storeMedicalRecord(Request $request)
     {
         $request->validate([
-            'pasien_id' => 'required|exists:pasiens,id',
+           'pasien_id' => 'required|exists:pasiens,id',
             'user_id' => 'required|exists:users,id',
             'diagnosis' => 'required|string',
             'tindakan' => 'required|string',
@@ -274,20 +263,19 @@ public function updatePatient(Request $request, $id)
         RekamMedis::create([
             'pasien_id' => $request->pasien_id,
             'user_id' => $request->user_id,
-            'perawat_id' => $request->perawat_id,
             'diagnosis' => $request->diagnosis,
             'tindakan' => $request->tindakan,
             'tanggal' => $request->tanggal,
         ]);
 
-        return redirect()->route('admin.medical_records.index');
+        return redirect()->route('admin.medical_records.index')->with('success', 'Rekam medis berhasil ditambahkan.');
     }
 
     // Mengedit data rekam medis
     public function editMedicalRecord(RekamMedis $rekamMedis)
     {
-        $pasiens = Pasien::all(); // Get all patients
-        $users = User::all(); // Get all users (doctors/nurses)
+        $pasiens = Pasien::all();
+        $users = User::where('role', 'perawat')->get();
 
         return view('admin.medical_records.edit', compact('rekamMedis', 'pasiens', 'users'));
     }
@@ -296,25 +284,29 @@ public function updatePatient(Request $request, $id)
     public function updateMedicalRecord(Request $request, RekamMedis $rekamMedis)
     {
         $request->validate([
+            'pasien_id' => 'required|exists:pasiens,id',
             'user_id' => 'required|exists:users,id',
             'diagnosis' => 'required|string',
             'tindakan' => 'required|string',
+            'tanggal' => 'required|date',
         ]);
 
         $rekamMedis->update([
+            'pasien_id' => $request->pasien_id,
             'user_id' => $request->user_id,
             'diagnosis' => $request->diagnosis,
             'tindakan' => $request->tindakan,
+            'tanggal' => $request->tanggal,
         ]);
 
-        return redirect()->route('admin.medical_records.index');
+        return redirect()->route('admin.medical_records.index')->with('success', 'Rekam medis berhasil diperbarui.');
     }
 
     // Menghapus data rekam medis
     public function destroyMedicalRecord(RekamMedis $rekamMedis)
     {
         $rekamMedis->delete();
-        return redirect()->route('admin.medical_records.index');
+        return redirect()->route('admin.medical_records.index')->with('success', 'Rekam medis berhasil dihapus.');
     }
 
 }

@@ -41,7 +41,7 @@
                 <option value="" disabled>Pilih Pasien</option>
                 @foreach($pasiens as $pasien)
                     <option value="{{ $pasien->id }}" {{ old('pasien_id', $rekamMedis->pasien_id) == $pasien->id ? 'selected' : '' }}>
-                        {{ $pasien->nama }} ({{ $pasien->no_rm }})
+                        {{ $pasien->nama }} ({{ $pasien->id }})
                     </option>
                 @endforeach
             </select>
@@ -57,7 +57,7 @@
                 <option value="" disabled>Pilih Perawat</option>
                 @foreach($users as $user)
                     <option value="{{ $user->id }}" {{ old('user_id', $rekamMedis->user_id) == $user->id ? 'selected' : '' }}>
-                        {{ $user->name }}
+                        {{ $user->name }} ({{ $user->nip }})
                     </option>
                 @endforeach
             </select>

@@ -28,5 +28,9 @@ class RekamMedis extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function perawat()
+    {
+        return $this->belongsTo(User::class, 'perawat_id');
+    }
 
 }

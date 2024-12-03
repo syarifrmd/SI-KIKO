@@ -50,13 +50,14 @@
         </div>
 
         <!-- Perawat Dropdown -->
+        <!-- Perawat Dropdown -->
         <div class="form-group">
             <label for="user_id">Perawat</label>
             <select class="form-control @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
                 <option value="" disabled selected>Pilih Perawat</option>
-                @foreach($users as $user)  <!-- Ensure you pass the users to the view -->
+                @foreach($users as $user)
                     <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                        {{ $user->name }} ({{ $user->nip}})
+                        {{ $user->name }} ({{ $user->nip }})
                     </option>
                 @endforeach
             </select>
@@ -64,6 +65,7 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+
 
         <!-- Diagnosis Input -->
         <div class="form-group">

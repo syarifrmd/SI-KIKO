@@ -6,6 +6,7 @@ use App\Models\Pasien;
 use App\Models\RekamMedis;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage; // Tambahkan ini
 
 class PerawatController extends Controller
 {
@@ -37,7 +38,7 @@ class PerawatController extends Controller
             ? $request->file('foto_pasien')->store('foto_pasien', 'public')
             : null;
 
-        Pasien::createPatient([
+        Pasien::create([
             'nama' => $request->nama,
             'alamat' => $request->alamat,
             'tanggal_lahir' => $request->tanggal_lahir,
@@ -63,14 +64,14 @@ class PerawatController extends Controller
             'alamat' => 'required|string',
             'tanggal_lahir' => 'required|date',
             'ruangan_pasien' => 'required|string',
-            'foto_pasien' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'foto_pasien' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $pasien = Pasien::findOrFail($id);
 
         if ($request->hasFile('foto_pasien')) {
             if ($pasien->foto_pasien) {
-                \Storage::delete('public/' . $pasien->foto_pasien);
+                Storage::delete('public/' . $pasien->foto_pasien); // Gunakan Storage di sini
             }
             $fotoPasienPath = $request->file('foto_pasien')->store('foto_pasien', 'public');
         } else {
@@ -93,7 +94,7 @@ class PerawatController extends Controller
     {
         $pasien = Pasien::findOrFail($id);
         if ($pasien->foto_pasien) {
-            \Storage::delete('public/' . $pasien->foto_pasien);
+            Storage::delete('public/' . $pasien->foto_pasien); // Gunakan Storage di sini
         }
         $pasien->delete();
 

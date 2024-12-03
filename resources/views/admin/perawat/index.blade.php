@@ -54,7 +54,7 @@
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
-            justify-content: space-between;
+            
         }
 
         .card {
@@ -159,36 +159,39 @@
 
     <!-- Content Wrapper -->
     <div class="content-wrapper">
-        <h1 class="text-tittle">Daftar Perawat</h1>
-        <a href="{{ route('admin.perawat.create') }}" class="btn btn-primary mb-3">Tambah Perawat</a>
-        <br><br>
-        <!-- Card container -->
-        <div class="card-container">
-            @foreach($perawats as $perawat)
-                <div style="align-items: center; justify-content: center; display: flex;" class="card " class="card">
-                    <img style="width: 177px; height: 236px; object-fit: cover; " src="{{ $perawat->foto_perawat ? asset('storage/'.$perawat->foto_perawat) : asset('storage/foto_perawat/default.jpg') }}" alt="Foto Perawat">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ $perawat->name }}</h5>
-                        <p class="card-text">
-                            <strong>NIP:</strong> {{ $perawat->nip }} <br>
-                            <strong>Tanggal Masuk:</strong> 
-                            @if($perawat->tanggal_masuk)
-                                {{ \Carbon\Carbon::parse($perawat->tanggal_masuk)->format('d-m-Y') }}
-                            @else
-                                N/A
-                            @endif
-                        </p>
-                        <a href="{{ route('admin.perawat.edit', $perawat->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('admin.perawat.destroy', $perawat->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this perawat?')">Delete</button>
-                        </form>
+        <h1 style="margin-left: 30px" class="text-tittle">Daftar Perawat</h1>
+        <a style="margin-left: 30px;" href="{{ route('admin.perawat.create') }}" class="btn btn-primary mb-3">Tambah Perawat</a>
+        <div class="container" style="margin-top: 40px">
+            <div class="row">
+                @foreach($perawats as $perawat)
+                    <div class="col-md-3 mb-4 d-flex align-items-stretch">
+                        <div class="card">
+                            <img src="{{ $perawat->foto_perawat ? asset('storage/'.$perawat->foto_perawat) : asset('storage/foto_perawat/default.jpg') }}" alt="Foto Perawat">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ $perawat->name }}</h5>
+                                <p class="card-text">
+                                    <strong>NIP:</strong> {{ $perawat->nip }} <br>
+                                    <strong>Tanggal Masuk:</strong> 
+                                    @if($perawat->tanggal_masuk)
+                                        {{ \Carbon\Carbon::parse($perawat->tanggal_masuk)->format('d-m-Y') }}
+                                    @else
+                                        N/A
+                                    @endif
+                                </p>
+                                <a href="{{ route('admin.perawat.edit', $perawat->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('admin.perawat.destroy', $perawat->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus perawat ini?')">Hapus</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     </div>
+    
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>

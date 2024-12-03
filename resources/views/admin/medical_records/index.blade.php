@@ -16,17 +16,21 @@
             top: 0;
             left: 0;
             width: 250px;
-            background-color: #343a40;
-            padding-top: 20px;
+            background-color: #2c3e50;
+            padding-top: 30px;
+            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
         .sidebar .nav-link {
-            color: #ddd;
-            padding: 10px 15px;
+            color: #ecf0f1;
+            padding: 12px 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
 
         .sidebar .nav-link:hover {
-            background-color: #007bff;
+            background-color: #1abc9c;
             color: white;
         }
 
@@ -34,24 +38,33 @@
         .content-wrapper {
             margin-left: 250px;
             padding: 20px;
+            background-color: #f8f9fa;
         }
 
-        .navbar {
-            margin-left: 250px;
+        .text-title {
+            font-size: 34px;
+            margin-bottom: 20px;
+            color: #28a745; /* Warna hijau terang */
         }
 
         .table-wrapper {
             margin-top: 30px;
         }
 
-        .text-title {
-            font-size: 34px;
-            margin-bottom: 20px;
-            color: green;
+        .table {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .action-btns button {
-            margin-right: 5px;
+        .table th {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-primary, .btn-warning, .btn-danger {
+            font-size: 0.875rem;
+            padding: 8px 12px;
         }
     </style>
 </head>
@@ -62,7 +75,6 @@
         <a class="nav-link" href="{{ route('admin.dashboard') }}">
             <h3 class="text-white text-center mb-4">Admin Dashboard</h3>
         </a>
-    
         <ul class="nav flex-column">
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('admin.perawat.index') }}">
@@ -110,12 +122,12 @@
                             <td>{{ $rekamMedis->diagnosis }}</td>
                             <td>{{ $rekamMedis->tindakan }}</td>
                             <td>{{ \Carbon\Carbon::parse($rekamMedis->tanggal)->format('d-m-Y') }}</td>
-                            <td class="action-btns">
+                            <td>
                                 <a href="{{ route('admin.medical_records.edit', $rekamMedis->id) }}" class="btn btn-warning btn-sm">Edit</a>
                                 <form action="{{ route('admin.medical_records.destroy', $rekamMedis->id) }}" method="POST" style="display:inline;">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus rekam medis ini?')">Delete</button>
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus rekam medis ini?')">Hapus</button>
                                 </form>
                             </td>
                         </tr>
