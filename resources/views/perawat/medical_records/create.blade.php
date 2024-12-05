@@ -39,9 +39,8 @@
             <select class="form-control @error('pasien_id') is-invalid @enderror" id="pasien_id" name="pasien_id" required>
                 <option value="" disabled selected>Pilih Pasien</option>
                 @foreach($pasiens as $pasien)
-                    <option value="{{ $pasien->id }}" {{ old('pasien_id') == $pasien->id ? 'selected' : '' }}>
-                        {{ $pasien->nama }} ({{ $pasien->id }})
-                    </option>
+                    <option value="{{ $pasien->id }}" {{ old('pasien_id') == $pasien->id ? 'selected' : '' }}> {{ $pasien->nama }} ({{ $pasien->id }})
+                </option>
                 @endforeach
             </select>
             @error('pasien_id')
@@ -56,17 +55,14 @@
             <select class="form-control @error('user_id') is-invalid @enderror" id="user_id" name="user_id" required>
                 <option value="" disabled selected>Pilih Perawat</option>
                 @foreach($users as $user)
-                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
-                        {{ $user->name }} ({{ $user->nip }})
-                    </option>
+                    <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}> {{ $user->name }} ({{ $user->nip }})
+                </option>
                 @endforeach
             </select>
             @error('user_id')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
-
-
         <!-- Diagnosis Input -->
         <div class="form-group">
             <label for="diagnosis">Diagnosis</label>
@@ -75,7 +71,7 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
-
+        
         <!-- Tindakan Input -->
         <div class="form-group">
             <label for="tindakan">Tindakan</label>

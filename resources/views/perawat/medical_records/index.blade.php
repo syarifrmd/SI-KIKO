@@ -6,8 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Rekam Medis</title>
+    <link rel="stylesheet" href="https://cdn.lineicons.com/4.0/lineicons.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         /* Custom styling for the sidebar */
         .sidebar {
@@ -69,71 +72,41 @@
     </style>
 </head>
 <body>
-        <!--navbar-->
+        <!-- Sidebar -->
         <div class="sidebar">
-        <h3 class="text-white text-center mb-4">Pegawai Dashboard</h3>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" href="{{ route('perawat.dashboard') }}">
-                    <i class="fas fa-user-md"></i> Profile
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="collapse" href="#multi" role="button" aria-expanded="false" aria-controls="multi">Input Data</a>
-                <ul class="collapes multi-collapse" id="multi">
-                    <a class="nav-link" href="{{ route('perawat.patients.create') }}">
-                        <i class="fas fa-procedures"></i> Pasien
+            <h3 class="text-white text-center mb-4">Rumah Sakit KIKO</h3>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('perawat.dashboard') }}">
+                        <i class="fas fa-user-md"></i> Profile
                     </a>
-                    <a class="nav-link" href="{{ route('perawat.medical_records.index') }}">
-                        <i class ="fas fa-notes-medical"></i> Rekam Medis
-                    </a>
-                </ul>
-            </li>
-            <li class  ="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#multi-two" role="button" aria-expanded="false" aria-controls="multi-two">Rekap Data</a>
-                <ul class="collapes multi-collapse" id="multi-two">
-                    <a class="nav-link" href="{{ route('perawat.patients.index') }}">
-                        <i class="fas fa-procedures"></i> Data Pasien
-                    </a>
-                    <a class="nav-link" href= >
-                        <i class ="fas fa-notes-medical"></i> Data Rekam Medis
-                    </a>
-                </ul>
-            </li>
-        </ul>
-    </div>
-
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#multi" role="button" aria-expanded="false" aria-controls="multi">Input Data</a>
+                    <ul class="collapse multi-collapse" id="multi">
+                        <li><a class="nav-link" href="{{ route('perawat.patients.create') }}">
+                            <i class="fas fa-procedures"></i> Pasien</a></li>
+                        <li><a class="nav-link" href="{{ route('perawat.medical_records.create') }}">
+                            <i class ="fas fa-notes-medical"></i> Rekam Medis</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#multi-two" role="button" aria-expanded="false" aria-controls="multi-two">Rekap Data</a>
+                    <ul class="collapse multi-collapse" id="multi-two">
+                        <li><a class="nav-link" href="{{ route('perawat.patients.index') }}">
+                            <i class="bi bi-clipboard-data-fill"></i> Data Pasien</a></li>
+                        <li><a class="nav-link" href="{{ route('perawat.medical_records.index') }}">
+                            <i class="bi bi-clipboard2-pulse-fill"></i> Data Rekam Medis</a>
+                            </li>
+                </li>
+            </ul>
+        </div>
     <!-- Content Wrapper -->
     <div class="content-wrapper ">
-        <!-- Navbar atas -->
-        <nav style="width: 300px; float: right;" class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container-fluid">
-                <span class="navbar-text">
-                    <strong>{{ auth()->user()->name }}</strong>
-                </span>
-                <div class="ml-auto">
-                    <div class="btn-group">
-                        <!-- Dropdown button -->
-                        <button type="button"  class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-user"></i> Admin
-                        </button>
-                        <div class="dropdown-menu">
-                            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                                @csrf
-                                <button type="submit" class="dropdown-item btn-logout">
-                                    <i class="fas fa-sign-out-alt"></i> Logout
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
-        <br><br>
     <!-- Content Wrapper -->
     <div class="content-wrapper">
         <h1 class="text-title">Daftar Rekam Medis</h1>
-        <a href="{{ route('perawat.medical_records.create') }}" class="btn btn-primary mb-3">Tambah Rekam Medis</a>
+        <!-- <a href="{{ route('perawat.medical_records.create') }}" class="btn btn-primary mb-3">Tambah Rekam Medis</a> -->
 
         <!-- Tabel Rekam Medis -->
         <div class="table-wrapper">
@@ -173,6 +146,9 @@
         </div>
     </div>
 
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="{{ asset('js/navbar.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>

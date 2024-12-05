@@ -173,4 +173,41 @@ class PerawatController extends Controller
 
         return redirect()->route('perawat.medical_records.index')->with('success', 'Rekam medis berhasil dihapus!');
     }
+
+    // Menyimpan data perawat
+    public function storePerawat(Request $request)
+    {
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'nip' => 'required|unique:users,nip',
+        'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
+        'tanggal_masuk' => 'required|date',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|min:6',
+        'foto_perawat' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
+
+    $fotoPerawatPath = null;
+    if ($request->hasFile('foto_perawat')) {
+        $fotoPerawatPath = $request->file('foto_perawat')->store('foto_perawat', 'public');
+    }
+
+    User::create([
+        'name' => $request->name,
+        'nip' => $request->nip,
+        'jenis_kelamin' => $request->jenis_kelamin,
+        'tanggal_masuk' => $request->tanggal_masuk,
+        'email' => $request->email,
+        'password' => bcrypt($request->password),
+        'foto_perawat' => $fotoPerawatPath,
+        'role' => 'perawat',
+    ]);
+
+    return redirect()->route('admin.perawat.index')->with('success', 'Perawat berhasil ditambahkan!');
+    }
+
+    
+
+
+
 }
