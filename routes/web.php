@@ -39,7 +39,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 //Role Perawat
-
 Route::middleware(['auth', 'role:perawat'])->group(function () {
     Route::get('perawat/dashboard', [PerawatController::class, 'index'])->name('perawat.dashboard');
 
