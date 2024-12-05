@@ -77,7 +77,7 @@
     @endif
 
     <!-- Form tambah pasien dengan dua kolom: kiri form, kanan gambar -->
-    <form action="{{ route('admin.patients.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('perawat.patients.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="row">
@@ -106,7 +106,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="form-group">
                     <label for="alamat">Alamat</label>
                     <textarea class="form-control @error('alamat') is-invalid @enderror" id="alamat" name="alamat" rows="3" required>{{ old('alamat') }}</textarea>
@@ -114,7 +113,6 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
                 <div class="form-group">
                     <label for="foto_pasien">Foto Pasien</label>
                     <input type="file" class="form-control @error('foto_pasien') is-invalid @enderror" id="foto_pasien" name="foto_pasien" required>
@@ -123,13 +121,11 @@
                     @enderror
                 </div>
 
-
                 <div class="d-flex">
                     <button type="submit" class="btn btn-primary">Simpan</button>
-                    <a href="{{ route('admin.patients.index') }}" class="btn btn-danger ml-2">Batal</a>
+                    <a href="{{ route('perawat.patients.index') }}" class="btn btn-danger ml-2">Batal</a>
                 </div>
             </div>
-
             <!-- Gambar Ilustrasi Kolom Kanan -->
             <div class="col-md-6">
                 <img style="width: 500px;" src="{{ asset('images/perawat.png') }}" alt="Ilustrasi Pasien" />

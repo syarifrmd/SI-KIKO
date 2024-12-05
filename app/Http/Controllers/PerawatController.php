@@ -15,6 +15,12 @@ class PerawatController extends Controller
     {
         return view('perawat.dashboard');
     }
+    // Menampilkan daftar pasien
+    public function ManagePatients() // Rename this function to avoid conflict with the `index()` function
+    {
+        $pasiens = Pasien::all(); // Mengambil semua data pasien
+        return view('perawat.patients.index', compact('pasiens'));
+    }
 
     // Menampilkan form untuk menambah pasien
     public function createPatient()
@@ -65,6 +71,7 @@ class PerawatController extends Controller
             'tanggal_lahir' => 'required|date',
             'ruangan_pasien' => 'required|string',
             'foto_pasien' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+              
         ]);
 
         $pasien = Pasien::findOrFail($id);
@@ -125,9 +132,10 @@ class PerawatController extends Controller
             'diagnosis' => 'required|string',
             'tindakan' => 'required|string',
             'tanggal' => 'required|date',
+            'perawat_id' => auth()->user()->id,
         ]);
 
-        RekamMedis::create($request->only('pasien_id', 'user_id', 'diagnosis', 'tindakan', 'tanggal'));
+        RekamMedis::create($request->only('pasien_id', 'user_id', 'diagnosis', 'tindakan', 'tanggal','perawat_id'));
 
         return redirect()->route('perawat.medical_records.index')->with('success', 'Rekam medis berhasil ditambahkan!');
     }

@@ -1,15 +1,15 @@
+<!-- resources/views/admin/medical_records/index.blade.php -->
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Data Pasien</title>
-    <link rel="stylesheet" href="https://cdn.lineicons.com/4.0/lineicons.css"  />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"  integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-<style>
+    <title>Kelola Rekam Medis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Custom styling for the sidebar */
         .sidebar {
             height: 100vh;
             position: fixed;
@@ -34,67 +34,41 @@
             color: white;
         }
 
+        /* Custom style for content */
         .content-wrapper {
-            margin-left: 250px;
+            margin-left: 120px;
             padding: 20px;
+            background-color: #f8f9fa;
         }
 
-        .navbar {
-            margin-left: 250px;
-            background-color: #ffffff;
-            padding: 10px 20px;
+        .text-title {
+            font-size: 34px;
+            margin-bottom: 20px;
+            color: #28a745; /* Warna hijau terang */
         }
 
-        .navbar .navbar-text {
-            font-size: 18px;
-            color: #34495e;
+        .table-wrapper {
+            margin-top: 30px;
         }
 
-        .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        .table {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
-        .card-header {
-            background-color: #34495e;
-            color: #ffffff;
-            border-radius: 10px 10px 0 0;
-        }
-
-        .card-body {
-            background-color: #ecf0f1;
-            border-radius: 0 0 10px 10px;
-        }
-
-        .card-title {
-            font-size: 30px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .card-text {
-            color: #7f8c8d;
-        }
-
-        /* Custom logout button */
-        .btn-logout {
-            background-color: #e74c3c;
+        .table th {
+            background-color: #28a745;
             color: white;
-            border-radius: 5px;
-            padding: 8px 15px;
         }
 
-        .btn-logout:hover {
-            background-color: #c0392b;
+        .btn-primary, .btn-warning, .btn-danger {
+            font-size: 0.875rem;
+            padding: 8px 12px;
         }
-
-        .navbar-text strong {
-            color: #2c3e50;
-        }
-</style>
+    </style>
 </head>
 <body>
-    <div class="wrapper"> 
         <!--navbar-->
         <div class="sidebar">
         <h3 class="text-white text-center mb-4">Pegawai Dashboard</h3>
@@ -156,29 +130,50 @@
             </div>
         </nav>
         <br><br>
-        <!--MAIN-->
-    <div class="container d-flex align-items-start mt-5">
-    <!-- Profile Card -->
-    <div class="card" style="width: 30rem;">
-        <img src="{{ auth()->user()->foto_perawat }}" class="card-img-top" alt="Profile Image">
-        <div class="card-body text-center">
-            <h5 class="card-title">{{ auth()->user()->name }}</h5>
-            <p class="card-text">{{ auth()->user()->nip }}</p>
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <h1 class="text-title">Daftar Rekam Medis</h1>
+        <a href="{{ route('perawat.medical_records.create') }}" class="btn btn-primary mb-3">Tambah Rekam Medis</a>
+
+        <!-- Tabel Rekam Medis -->
+        <div class="table-wrapper">
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Pasien</th>
+                        <th>Nama Perawat/Dokter</th>
+                        <th>Diagnosis</th>
+                        <th>Tindakan</th>
+                        <th>Tanggal</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($medicalRecords as $rekamMedis)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $rekamMedis->pasien->nama }}</td>
+                            <td>{{ $rekamMedis->user->name }}</td>
+                            <td>{{ $rekamMedis->diagnosis }}</td>
+                            <td>{{ $rekamMedis->tindakan }}</td>
+                            <td>{{ \Carbon\Carbon::parse($rekamMedis->tanggal)->format('d-m-Y') }}</td>
+                            <td>
+                                <a href="{{ route('perawat.medical_records.edit', $rekamMedis->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('perawat.medical_records.destroy', $rekamMedis->id) }}" method="POST" style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus rekam medis ini?')">Hapus</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <!-- Contact Details -->
-    <div class="ms-4">
-        <h5>Contact Information</h5>
-        <p><strong>Telepon:</strong> {{ auth()->user()->telepon_perawat }}</p>
-            <p><strong>Alamat:</strong> {{ auth()->user()->alamat }}</p>
-                <p><strong>Email:</strong> <a href="mailto:{{ auth()->user()->email }}">{{ auth()->user()->email }}</a></p>
-            <p><strong>Tanggal Lahir:</strong> {{ auth()->user()->tanggal_lahir }}</p>
-        <p><strong>Gender:</strong> {{ auth()->user()->jenis_kelamin }}</p>
-    </div>
-</div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
-    <script src="{{asset('js/navbar.js')}}" type="text/javascript" ></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

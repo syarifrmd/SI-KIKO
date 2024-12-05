@@ -41,14 +41,22 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 //Role Perawat
 Route::middleware(['auth', 'role:perawat'])->group(function () {
     Route::get('perawat/dashboard', [PerawatController::class, 'index'])->name('perawat.dashboard');
-
     //Route Pasien
     Route::get('perawat/patients', [PerawatController::class, 'managePatients'])->name('perawat.patients.index');
     Route::get('perawat/patients/create', [PerawatController::class, 'createPatient'])->name('perawat.patients.create');
     Route::post('perawat/patients', [PerawatController::class,'storePatient'])->name('perawat.patients.store');
+
     Route::get('perawat/patients/{pasien}/edit', [PerawatController::class, 'editPatient'])->name('perawat.patients.edit');
     Route::put('perawat/patients/{pasien}', [PerawatController::class, 'updatePatient'])->name('perawat.patients.update');
     Route::delete('perawat/patients/{pasien}', [PerawatController::class, 'destroyPatient'])->name('perawat.patients.destroy');
+    //Rekam Medis Routes
+    Route::get('perawat/medical-records', [PerawatController::class, 'manageMedicalRecords'])->name('perawat.medical_records.index');
+    Route::get('perawat/medical-records/create', [PerawatController::class, 'createMedicalRecord'])->name('perawat.medical_records.create');
+    Route::post('perawat/medical-records', [PerawatController::class, 'storeMedicalRecord'])->name('perawat.medical_records.store');
+
+    Route::get('perwat/medical-records/{rekamMedis}/edit', [PerawatController::class, 'editMedicalRecord'])->name('perawat.medical_records.edit');
+    Route::put('perawat/medical-records/{rekamMedis}', [PerawatController::class, 'updateMedicalRecord'])->name('perawat.medical_records.update');
+    Route::delete('perawat/medical-records/{rekamMedis}', [PerawatController::class, 'destroyMedicalRecord'])->name('perawat.medical_records.destroy');
 });
 
 
