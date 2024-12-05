@@ -108,18 +108,20 @@ class PerawatController extends Controller
         return redirect()->route('perawat.patients.index')->with('success', 'Pasien berhasil dihapus!');
     }
 
+
     // Menampilkan daftar rekam medis
     public function manageMedicalRecords()
     {
-        $medicalRecords = RekamMedis::all();
+        $medicalRecords = RekamMedis::with('pasien', 'user', 'perawat')->get();
         return view('perawat.medical_records.index', compact('medicalRecords'));
     }
 
     // Menampilkan form untuk menambah rekam medis
     public function createMedicalRecord()
     {
-        $pasiens = Pasien::all();
-        $users = User::where('role', 'perawat')->get();
+        $pasiens = Pasien::all(); 
+        $users = User::where('role', 'perawat')->get(); 
+
         return view('perawat.medical_records.create', compact('pasiens', 'users'));
     }
 
@@ -127,51 +129,61 @@ class PerawatController extends Controller
     public function storeMedicalRecord(Request $request)
     {
         $request->validate([
-            'pasien_id' => 'required|exists:pasiens,id',
+           'pasien_id' => 'required|exists:pasiens,id',
             'user_id' => 'required|exists:users,id',
             'diagnosis' => 'required|string',
             'tindakan' => 'required|string',
             'tanggal' => 'required|date',
-            'perawat_id' => auth()->user()->id,
         ]);
 
-        RekamMedis::create($request->only('pasien_id', 'user_id', 'diagnosis', 'tindakan', 'tanggal','perawat_id'));
+        RekamMedis::create([
+            'pasien_id' => $request->pasien_id,
+            'user_id' => $request->user_id,
+            'diagnosis' => $request->diagnosis,
+            'tindakan' => $request->tindakan,
+            'tanggal' => $request->tanggal,
+            'perawat_id' => $request->perawat_id, 
+        ]);
 
-        return redirect()->route('perawat.medical_records.index')->with('success', 'Rekam medis berhasil ditambahkan!');
+        return redirect()->route('perawat.medical_records.index')->with('success', 'Rekam medis berhasil ditambahkan.');
     }
 
     // Mengedit data rekam medis
-    public function editMedicalRecord($id)
+    public function editMedicalRecord(RekamMedis $rekamMedis)
     {
-        $rekamMedis = RekamMedis::findOrFail($id);
         $pasiens = Pasien::all();
-        $users = User::all();
+        $users = User::where('role', 'perawat')->get();
 
         return view('perawat.medical_records.edit', compact('rekamMedis', 'pasiens', 'users'));
     }
 
     // Memperbarui data rekam medis
-    public function updateMedicalRecord(Request $request, $id)
+    public function updateMedicalRecord(Request $request, RekamMedis $rekamMedis)
     {
-        $rekamMedis = RekamMedis::findOrFail($id);
         $request->validate([
+            'pasien_id' => 'required|exists:pasiens,id',
             'user_id' => 'required|exists:users,id',
             'diagnosis' => 'required|string',
             'tindakan' => 'required|string',
+            'tanggal' => 'required|date',
         ]);
 
-        $rekamMedis->update($request->only('user_id', 'diagnosis', 'tindakan'));
+        $rekamMedis->update([
+            'pasien_id' => $request->pasien_id,
+            'user_id' => $request->user_id,
+            'diagnosis' => $request->diagnosis,
+            'tindakan' => $request->tindakan,
+            'tanggal' => $request->tanggal,
+        ]);
 
-        return redirect()->route('perawat.medical_records.index')->with('success', 'Rekam medis berhasil diperbarui!');
+        return redirect()->route('perawat.medical_records.index')->with('success', 'Rekam medis berhasil diperbarui.');
     }
 
     // Menghapus data rekam medis
-    public function destroyMedicalRecord($id)
+    public function destroyMedicalRecord(RekamMedis $rekamMedis)
     {
-        $rekamMedis = RekamMedis::findOrFail($id);
         $rekamMedis->delete();
-
-        return redirect()->route('perawat.medical_records.index')->with('success', 'Rekam medis berhasil dihapus!');
+        return redirect()->route('perawat.medical_records.index')->with('success', 'Rekam medis berhasil dihapus.');
     }
 
     // Menyimpan data perawat

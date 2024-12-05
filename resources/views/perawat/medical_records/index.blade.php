@@ -119,7 +119,6 @@
                         <th>Diagnosis</th>
                         <th>Tindakan</th>
                         <th>Tanggal</th>
-                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -132,11 +131,8 @@
                             <td>{{ $rekamMedis->tindakan }}</td>
                             <td>{{ \Carbon\Carbon::parse($rekamMedis->tanggal)->format('d-m-Y') }}</td>
                             <td>
-                                <a href="{{ route('perawat.medical_records.edit', $rekamMedis->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('perawat.medical_records.destroy', $rekamMedis->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus rekam medis ini?')">Hapus</button>
+
+                        
                                 </form>
                             </td>
                         </tr>

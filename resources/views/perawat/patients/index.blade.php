@@ -179,11 +179,6 @@
                                         N/A
                                     @endif
                                 </p>
-                                <a href="{{ route('admin.patients.edit', $pasien->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                <form action="{{ route('admin.patients.destroy', $pasien->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus pasien ini?')">Hapus</button>
                                 </form>
                             </div>
                         </div>
