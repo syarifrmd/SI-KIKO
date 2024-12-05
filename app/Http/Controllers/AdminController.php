@@ -266,6 +266,7 @@ public function updatePatient(Request $request, $id)
             'diagnosis' => $request->diagnosis,
             'tindakan' => $request->tindakan,
             'tanggal' => $request->tanggal,
+            'perawat_id' => $request->perawat_id, 
         ]);
 
         return redirect()->route('admin.medical_records.index')->with('success', 'Rekam medis berhasil ditambahkan.');

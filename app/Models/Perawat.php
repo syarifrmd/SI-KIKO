@@ -15,6 +15,8 @@ class Perawat extends Model
         'nama', 
         'nip',
         'jenis_kelamin',
+        'foto_perawat',
+
     ];
 
     public function rekamMedis()
